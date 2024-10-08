@@ -7,7 +7,6 @@ type Role = 'ADMIN' | 'MEMBER'
 
 type PermissionsByRole = (
   user: User,
-  // eslint-disable-next-line prettier/prettier
   builder: AbilityBuilder<AppAbility>
 ) => void
 
@@ -17,5 +16,6 @@ export const permissions: Record<Role, PermissionsByRole> = {
   },
   MEMBER(_, { can }) {
     can('invite', 'User')
+    can('manage', 'Project')
   },
 }
