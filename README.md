@@ -1,81 +1,86 @@
-# Turborepo starter
+# Next.js SaaS + RBAC
 
-This is an official starter Turborepo.
+From [Rocketseat](https://www.rocketseat.com.br/) course [Criando SaaS com Next.js e RBAC](https://app.rocketseat.com.br/journey/saa-s-next-js-rbac/overview) (Creating SaaS with Next.js and RBAC)
+> Official repository: [rocketseat-education/course-saas-next-rbac](https://github.com/rocketseat-education/course-saas-next-rbac)
 
-## Using this example
+This project contains all the necessary boilerplate to setup a multi-tenant SaaS with Next.js including authentication and RBAC authorization.
 
-Run the following command:
+## Features
 
-```sh
-npx create-turbo@latest
-```
+### Authentication
 
-## What's inside?
+- [ ] It should be able to authenticate using e-mail & password;
+- [ ] It should be able to authenticate using Github account;
+- [ ] It should be able to recover password using e-mail;
+- [x] It should be able to create an account (e-mail, name and password);
 
-This Turborepo includes the following packages/apps:
+### Organizations
 
-### Apps and Packages
+- [ ] It should be able to create a new organization;
+- [ ] It should be able to get organizations to which the user belongs;
+- [ ] It should be able to update an organization;
+- [ ] It should be able to shutdown an organization;
+- [ ] It should be able to transfer organization ownership;
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Invites
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- [ ] It should be able to invite a new member (e-mail, role);
+- [ ] It should be able to accept an invite;
+- [ ] It should be able to revoke a pending invite;
 
-### Utilities
+### Members
 
-This Turborepo has some additional tools already setup for you:
+- [ ] It should be able to get organization members;
+- [ ] It should be able to update a member role;
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+### Projects
 
-### Build
+- [ ] It should be able to get projects within a organization;
+- [ ] It should be able to create a new project (name, url, description);
+- [ ] It should be able to update a project (name, url, description);
+- [ ] It should be able to delete a project;
 
-To build all apps and packages, run the following command:
+### Billing
 
-```
-cd my-turborepo
-pnpm build
-```
+- [ ] It should be able to get billing details for organization ($20 per project / $10 per member excluding billing role);
 
-### Develop
+## RBAC
 
-To develop all apps and packages, run the following command:
+Roles & permissions.
 
-```
-cd my-turborepo
-pnpm dev
-```
+### Roles
 
-### Remote Caching
+- Owner (count as administrator)
+- Administrator
+- Member
+- Billing (one per organization)
+- Anonymous
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+### Permissions table
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+|                          | Administrator | Member | Billing | Anonymous |
+| ------------------------ | ------------- | ------ | ------- | --------- |
+| Update organization      | ✅            | ❌     | ❌      | ❌        |
+| Delete organization      | ✅            | ❌     | ❌      | ❌        |
+| Invite a member          | ✅            | ❌     | ❌      | ❌        |
+| Revoke an invite         | ✅            | ❌     | ❌      | ❌        |
+| List members             | ✅            | ✅     | ✅      | ❌        |
+| Transfer ownership       | ⚠️            | ❌     | ❌      | ❌        |
+| Update member role       | ✅            | ❌     | ❌      | ❌        |
+| Delete member            | ✅            | ⚠️     | ❌      | ❌        |
+| List projects            | ✅            | ✅     | ✅      | ❌        |
+| Create a new project     | ✅            | ✅     | ❌      | ❌        |
+| Update a project         | ✅            | ⚠️     | ❌      | ❌        |
+| Delete a project         | ✅            | ⚠️     | ❌      | ❌        |
+| Get billing details      | ✅            | ❌     | ✅      | ❌        |
+| Export billing details   | ✅            | ❌     | ✅      | ❌        |
 
-```
-cd my-turborepo
-npx turbo login
-```
+> ✅ = allowed
+> ❌ = not allowed
+> ⚠️ = allowed w/ conditions
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+#### Conditions
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+- Only owners may transfer organization ownership;
+- Only administrators and project authors may update/delete the project;
+- Members can leave their own organization;
