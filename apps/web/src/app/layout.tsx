@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import { Providers } from './providers'
 
 export const metadata: Metadata = {
-  title: 'Create Next App',
+  title: 'Next.js SaaS RBAC',
 }
 
 export default function RootLayout({
