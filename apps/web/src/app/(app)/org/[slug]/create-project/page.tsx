@@ -1,19 +1,21 @@
-import { ProjectForm } from '@/app/(app)/org/[slug]/create-project/project-form'
-import { InterceptedSheetContent } from '@/components/intercepted-sheet-content'
-import { Sheet, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { redirect } from 'next/navigation'
 
-export default function CreateProject() {
+import { ability } from '@/auth/auth'
+
+import { ProjectForm } from './project-form'
+
+export default async function CreateProject() {
+  const permissions = await ability()
+
+  if (permissions?.cannot('create', 'Project')) {
+    redirect('/')
+  }
+
   return (
-    <Sheet defaultOpen>
-      <InterceptedSheetContent>
-        <SheetHeader>
-          <SheetTitle>Create project</SheetTitle>
-        </SheetHeader>
+    <div className="space-y-4">
+      <h1 className="text-2xl font-bold">Create project</h1>
 
-        <div className="py-4">
-          <ProjectForm />
-        </div>
-      </InterceptedSheetContent>
-    </Sheet>
+      <ProjectForm />
+    </div>
   )
 }
